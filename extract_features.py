@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from multiprocessing import Process
 import os
+import subprocess
 
 
 def to_gray(color_img):
@@ -77,11 +78,19 @@ if __name__ == '__main__':
     print('Combine SIFT features')
     fout_path = 'combined_sift_feat.npy'
     if os.path.exists(fout_path): exit(0)
-    combination = None
+    combination = []
+    num_feat = 0
     for root, dirs, files in os.walk(sift_feat_dir):
-        for f in files:
+        for i, f in enumerate(files):
             _f = os.path.join(root, f)
-            print(_f)
-            temp = np.load(_f)
-            combination = temp if isinstance(combination, type(None)) else np.vstack((combination, temp))
+            try:
+                temp = np.load(_f)
+                num_feat += temp.shape[0]
+                print(num_feat)
+                combination.append(temp)
+            except Exception as e:
+                print(e)
+                cmd = 'rm {}'.format(_f)
+                subprocess.call(cmd, shell=True)
+    combination = np.vstack(np.array(combination))
     np.save(fout_path, combination)
