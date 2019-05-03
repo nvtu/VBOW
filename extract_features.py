@@ -82,5 +82,5 @@ if __name__ == '__main__':
         for f in files:
             _f = os.path.join(root, f)
             temp = np.load(_f)
-            combination = np.concatenate((combination, temp))
+            combination = temp if combination == None else np.vstack((combination, temp))
     np.save(fout_path, combination)
