@@ -78,6 +78,11 @@ if __name__ == '__main__':
     print('Combine SIFT features')
     fout_path = 'combined_sift_feat.npy'
     if os.path.exists(fout_path): exit(0)
+    num_feat = 0
+    for roor, dirs, files in os.walk(sift_feat_dir):
+        for f in files:
+            _f = os.path.join(root, f)
+            num_feat += _f.shape[0]
     combination = None
     for root, dirs, files in os.walk(sift_feat_dir):
         for f in files:
