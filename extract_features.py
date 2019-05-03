@@ -46,7 +46,7 @@ def multiprocess_extract(params):
 
 
 if __name__ == '__main__':
-    dataset_path = '/Users/tuninh/DCU/LSC2019/LSC_DATA'
+    dataset_path = '/home/tuninh_2411/LSC_DATA'
     sift_feat_dir = str(Path.cwd() / 'sift_feat')
     if not os.path.isdir(sift_feat_dir):
         os.mkdir(sift_feat_dir)
@@ -71,16 +71,16 @@ if __name__ == '__main__':
 #            kp, desc = gen_sift_features(gray_img)
 #            if isinstance(desc, type(None)): continue
 #            np.save(fout_path, desc / 255)
-    multiprocess_extract(images_info)
+#    multiprocess_extract(images_info)
 
     # Combine extracted SIFT features into one file
     print('Combine SIFT features')
     fout_path = 'combined_sift_feat.npy'
     if os.path.exists(fout_path): exit(0)
-    combination = np.array([])
+    combination = None
     for root, dirs, files in os.walk(sift_feat_dir):
         for f in files:
             _f = os.path.join(root, f)
             temp = np.load(_f)
-            combination = np.vstack((combination, temp))
+            combination = np.concatenate((combination, temp))
     np.save(fout_path, combination)
