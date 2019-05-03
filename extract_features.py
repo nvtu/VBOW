@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from multiprocessing import Process
 import os
+import subprocess
 
 
 def to_gray(color_img):
@@ -81,6 +82,11 @@ if __name__ == '__main__':
     for root, dirs, files in os.walk(sift_feat_dir):
         for f in files:
             _f = os.path.join(root, f)
-            temp = np.load(_f)
-            combination = temp if combination == None else np.vstack((combination, temp))
+            try:
+                temp = np.load(_f)
+                combination = temp if isinstance(combination, type(None)) else np.vstack((combination, temp))
+            except Exception as e:
+                print(e)
+                cmd = 'rm {}'.format(_f)
+                subprocess.call(cmd, shell=True)
     np.save(fout_path, combination)
