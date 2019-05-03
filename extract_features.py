@@ -81,6 +81,7 @@ if __name__ == '__main__':
     for root, dirs, files in os.walk(sift_feat_dir):
         for f in files:
             _f = os.path.join(root, f)
+            print(_f)
             temp = np.load(_f)
-            combination = temp if combination == None else np.vstack((combination, temp))
+            combination = temp if isinstance(combination, type(None)) else np.vstack((combination, temp))
     np.save(fout_path, combination)
