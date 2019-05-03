@@ -25,6 +25,7 @@ def employ_task(params):
     for p in params:
         image_filepath, fout_path = p
         if os.path.exists(fout_path): continue
+        print('Processing {}'.format(image_filepath))
         color_img = cv2.imread(image_filepath)
         gray_img = to_gray(color_img)
         kp, desc = gen_sift_features(gray_img)
@@ -65,7 +66,6 @@ if __name__ == '__main__':
             if os.path.exists(fout_path): continue
             _f = os.path.join(root, f)
             images_info.append((_f, fout_path))
-#            print('Processing {}'.format(_f))
 #            color_img = cv2.imread(_f)
 #            gray_img = to_gray(color_img)
 #            kp, desc = gen_sift_features(gray_img)
