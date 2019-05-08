@@ -13,7 +13,7 @@ def to_gray(color_img):
 
 
 def gen_sift_features(gray_img):
-    sift = cv2.xfeatures2d.SIFT_create()
+    sift = cv3.xfeatures2d.SIFT_create()
     kp, desc = sift.detectAndCompute(gray_img, None)
     return kp, desc
 
@@ -72,26 +72,25 @@ if __name__ == '__main__':
 #            kp, desc = gen_sift_features(gray_img)
 #            if isinstance(desc, type(None)): continue
 #            np.save(fout_path, desc / 255)
-#    multiprocess_extract(images_info)
+    multiprocess_extract(images_info)
 
     # Combine extracted SIFT features into one file
     print('Combine SIFT features')
     fout_path = 'combined_sift_feat.npy'
     if os.path.exists(fout_path): exit(0)
+    combination = []
     num_feat = 0
-    for roor, dirs, files in os.walk(sift_feat_dir):
-        for f in files:
-            _f = os.path.join(root, f)
-            num_feat += _f.shape[0]
-    combination = None
     for root, dirs, files in os.walk(sift_feat_dir):
-        for f in files:
+        for i, f in enumerate(files):
             _f = os.path.join(root, f)
             try:
                 temp = np.load(_f)
-                combination = temp if isinstance(combination, type(None)) else np.vstack((combination, temp))
+                num_feat += temp.shape[0]
+                print(num_feat)
+                combination.append(temp)
             except Exception as e:
                 print(e)
                 cmd = 'rm {}'.format(_f)
                 subprocess.call(cmd, shell=True)
+    combination = np.vstack(np.array(combination))
     np.save(fout_path, combination)
