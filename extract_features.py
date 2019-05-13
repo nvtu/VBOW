@@ -13,7 +13,7 @@ def to_gray(color_img):
 
 
 def gen_sift_features(gray_img):
-    sift = cv3.xfeatures2d.SIFT_create()
+    sift = cv2.xfeatures2d.SIFT_create()
     kp, desc = sift.detectAndCompute(gray_img, None)
     return kp, desc
 

@@ -13,7 +13,7 @@ idf_path = str(Path.cwd() / 'idf.npy')
 idf = np.load(idf_path)
 
 
-def vbow_create(tf_feat):
+def vbow_create(tf_feat, idf):
     vbow_feat = tf_feat * idf
     vbow_feat = vbow_feat / np.sum(vbow_feat) # Normalize feature
     return vbow_feat
@@ -23,7 +23,7 @@ def employ_task(params):
     for p in params:
         _f, fout_path = p
         tf_feat = np.load(_f)
-        vbow_feat = vbow_create(tf_feat)
+        vbow_feat = vbow_create(tf_feat, idf)
         np.save(fout_path, vbow_feat)
 
 

@@ -15,7 +15,7 @@ kmeans_storage = joblib.load('kmeans_cluster.storage')
 num_cluster = len(kmeans_storage.cluster_centers_)
 
 
-def generate_term_freq(sift_feat):
+def generate_term_freq(sift_feat, kmeans_storage):
     preds = kmeans_storage.predict(sift_feat)
     tf_dict = Counter(preds)
     term_freq = np.zeros((num_cluster, 1))
@@ -40,7 +40,7 @@ def employ_task(params):
         _f, fout_path = p
         print(fout_path)
         sift_feat = np.load(_f)
-        term_freq = generate_term_freq(sift_feat)
+        term_freq = generate_term_freq(sift_feat, kmeans_storage)
         np.save(fout_path, term_freq)
 
 
