@@ -15,8 +15,7 @@ def to_gray(color_img):
 def gen_sift_features(gray_img):
     sift = cv2.xfeatures2d.SIFT_create()
     kp, desc = sift.detectAndCompute(gray_img, None)
-    return kp, desc
-
+    return kp, desc 
 
 def show_sift_features(gray_img, color_img, kp):
     return plt.imshow(cv2.drawKeypoints(gray_img, kp, color_img.copy()))
@@ -47,7 +46,7 @@ def multiprocess_extract(params):
 
 
 if __name__ == '__main__':
-    dataset_path = '/home/tuninh_2411/LSC_DATA'
+    dataset_path = '/home/van_ninh2/VBOW/ImageCLEF2019'
     sift_feat_dir = str(Path.cwd() / 'sift_feat')
     if not os.path.isdir(sift_feat_dir):
         os.mkdir(sift_feat_dir)
@@ -57,7 +56,8 @@ if __name__ == '__main__':
     for root, dirs, files in os.walk(dataset_path):
         for d in dirs:
             if d == '.DS_Store': continue
-            _d = os.path.join(sift_feat_dir, d)
+            _d = os.path.join(root, d)
+            _d = _d.replace(dataset_path, sift_feat_dir)
             if not os.path.isdir(_d):
                 os.mkdir(_d)
         for f in files:
